@@ -1,0 +1,44 @@
+{
+  "coverage": {
+    "repo_url": "https://github.com/Z3Prover/z3.git",
+    "extra_repos": ["https://github.com/Z3Prover/z3test.git"],
+    "setup_command": null,
+    "list_tests_command": "find z3test/regressions -type f \\( -name '*.smt2' -o -name '*.smt' \\) -not -name '*.disabled' | sed 's#^z3test/##' | sort",
+    "run_test_command": "timeout ${TEST_TIMEOUT:-120} z3/build/z3 z3test/{test}",
+    "target_jobs": 6,
+    "avg_test_time_seconds": 10.0,
+    "oracle_solver": null,
+    "oracle_fetch": null
+  },
+  "fuzzer": {
+    "repo_url": "https://github.com/Z3Prover/z3.git",
+    "extra_repos": ["https://github.com/Z3Prover/z3test.git"],
+    "extra_pip_packages": [],
+    "tests_root": "../z3test",
+    "list_tests_command": "find ../z3test/regressions -type f \\( -name '*.smt2' -o -name '*.smt' \\) -not -name '*.disabled' | sed 's#^\\.\\./z3test/##' | sort",
+    "target_binary_path": "./build/z3",
+    "oracle_solver": "cvc5",
+    "oracle_fetch_fallback": {
+      "type": "github_release",
+      "repo": "cvc5/cvc5",
+      "asset_keywords": ["linux", "x86_64", "static"],
+      "binary_name": "cvc5"
+    },
+    "resources": {
+      "max_workers": null,
+      "max_jobs": 9,
+      "cpu_warning": 85.0,
+      "cpu_critical": 95.0,
+      "memory_warning_available_gb": 2.0,
+      "memory_critical_available_gb": 0.5,
+      "check_interval": 2,
+      "pause_duration": 10,
+      "max_process_memory_mb": 2048,
+      "max_process_memory_mb_warning": 1536
+    },
+    "skip_sut_clone_if_binary_cached": true,
+    "git_cleanup_dirs": ["z3", "z3test", "yinyang"],
+    "namespace_prefix": "",
+    "clang_args": []
+  }
+}

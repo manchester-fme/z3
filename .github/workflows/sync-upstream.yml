@@ -1,0 +1,55 @@
+name: Sync upstream
+
+# Keeps this fork's master merged with upstream Z3Prover/z3's master. Needed
+# for CAST's pipeline to have anything new to build/fuzz at all: manager.yml
+# polls this fork's own commit history (cast.yml passes repo_url as this
+# fork's own URL, not upstream's) for new commits, so upstream commits that
+# never land here are invisible to the whole build-queue/fuzzing-schedule
+# machinery.
+#
+# Plain merge + push, no rebase (rebasing would rewrite this fork's own
+# .cast/ and .github/workflows/cast.yml commit history) and no PR (the goal
+# is master always being current, not a human merging each sync). This fork's
+# own commits only ever touch .cast/ and .github/workflows/ - disjoint from
+# upstream's src/, test/, etc. - so real merge conflicts should be rare. If
+# one does happen, the job fails loudly rather than guessing (no
+# auto-resolution, no force-push) - needs a human to resolve it manually.
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # hourly
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v5
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge upstream/master
+        run: |
+          git remote add upstream https://github.com/Z3Prover/z3.git
+          git fetch upstream master
+
+          BEHIND=$(git rev-list --count HEAD..upstream/master)
+          if [ "$BEHIND" = "0" ]; then
+            echo "✅ Already up to date with upstream/master"
+            exit 0
+          fi
+
+          echo "📥 $BEHIND new commit(s) on upstream/master - merging"
+          git merge upstream/master --no-edit
+          git push origin master
+          echo "✅ Merged and pushed upstream/master ($BEHIND commit(s))"
