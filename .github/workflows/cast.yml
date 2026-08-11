@@ -85,8 +85,4 @@ jobs:
       repo_url: ${{ github.server_url }}/${{ github.repository }}
       solver_dir: z3/.cast
       commit_hash: ${{ inputs.commit_hash }}
-      # z3's fuzzer.clang_args (for coverage-selected test targeting) hasn't
-      # been tuned yet - fuzz the full z3test corpus for now instead of a
-      # coverage-selected subset until that's filled in.
-      no_coverage: true
     secrets: inherit
