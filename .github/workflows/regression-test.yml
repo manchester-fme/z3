@@ -15,6 +15,10 @@ name: CAST Regression Test
 on:
   workflow_dispatch: {}
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   known-bug-still-confirms:
     name: z3 0bd679a still confirms "an invalid model was generated"
