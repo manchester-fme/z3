@@ -25,7 +25,7 @@ jobs:
     uses: manchester-fme/CAST/.github/workflows/regression-test.yml@main
     with:
       solver: z3
-      repo_url: https://github.com/Z3Prover/z3
+      repo_url: ${{ github.server_url }}/${{ github.repository }}  # this fork -- .cast/manifest.json only ever lives here, never in real upstream
       solver_dir: z3/.cast
       archive: manchester-fme/z3/solvers/z3/bugs/bugs-0bd679a-1786499226.tar.gz
       commit_hash: 0bd679a404bee551393fd94ca813ccc7eb034973
