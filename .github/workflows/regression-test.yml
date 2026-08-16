@@ -22,7 +22,7 @@ permissions:
 jobs:
   known-bug-still-confirms:
     name: z3 0bd679a still confirms "an invalid model was generated"
-    uses: manchester-fme/CAST/.github/workflows/regression-test.yml@main
+    uses: manchester-fme/CAST/.github/workflows/pre-release.yml@main
     with:
       solver: z3
       repo_url: ${{ github.server_url }}/${{ github.repository }}  # this fork -- .cast/manifest.json only ever lives here, never in real upstream
