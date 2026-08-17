@@ -1,4 +1,5 @@
 {
+  "solver": "z3",
   "coverage": {
     "repo_url": "https://github.com/Z3Prover/z3.git",
     "extra_repos": [
